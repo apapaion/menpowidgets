@@ -883,7 +883,7 @@ def visualize_landmarks_3d(landmarks, browser_style='buttons',
 def visualize_meshes_3d(meshes, browser_style='buttons',
                         custom_info_callback=None):
     r"""
-    Widget that allows browsing through a `list` of 3D meshes. The supported 
+    Widget that allows browsing through a `list` of 3D meshes. The supported
     objects are:
 
             ==================================
@@ -921,7 +921,11 @@ def visualize_meshes_3d(meshes, browser_style='buttons',
     # Ensure that the code is being run inside a Jupyter kernel!!
     from menpowidgets.utils import verify_ipython_and_kernel
     verify_ipython_and_kernel()
-    print('Initializing...')
+    out = ipywidgets.Output()
+    ipydisplay.display(out)
+    with out:
+        ipydisplay.clear_output(wait=True)
+        print('Initializing...')
 
     # Make sure that meshes is a list even with one member
     if not isinstance(meshes, Sized):
@@ -937,7 +941,8 @@ def visualize_meshes_3d(meshes, browser_style='buttons',
     def render_function(_):
         # Clear current figure
         save_figure_wid.renderer.clear_figure()
-        ipydisplay.clear_output(wait=True)
+        with out:
+            ipydisplay.clear_output(wait=True)
 
         # Get selected mesh index
         i = mesh_number_wid.selected_values if n_meshes > 1 else 0
@@ -1033,7 +1038,8 @@ def visualize_meshes_3d(meshes, browser_style='buttons',
 
     # Trigger initial visualization
     render_function({})
-    print_dynamic('')
+    with out:
+        print_dynamic('')
 
 
 def visualize_images(images, figure_size=(7, 7), browser_style='buttons',
@@ -1607,7 +1613,11 @@ def visualize_shape_model_2d(shape_model, n_parameters=5, mode='multiple',
     verify_ipython_and_kernel()
     from menpo.visualize.viewmatplotlib import (_set_axes_options,
                                                 _parse_axes_limits)
-    print('Initializing...')
+    out = ipywidgets.Output()
+    ipydisplay.display(out)
+    with out:
+        ipydisplay.clear_output(wait=True)
+        print('Initializing...')
 
     # Make sure that shape_model is a list even with one member
     if not isinstance(shape_model, list):
@@ -1630,7 +1640,8 @@ def visualize_shape_model_2d(shape_model, n_parameters=5, mode='multiple',
     def render_function(change):
         # Clear current figure, but wait until the generation of the new data
         # that will be rendered
-        ipydisplay.clear_output(wait=True)
+        with out:
+            ipydisplay.clear_output(wait=True)
 
         # Get selected level
         level = 0
@@ -1934,7 +1945,11 @@ def visualize_shape_model_3d(shape_model, n_parameters=5, mode='multiple',
     # Ensure that the code is being run inside a Jupyter kernel!
     from .utils import verify_ipython_and_kernel
     verify_ipython_and_kernel()
-    print_dynamic('Initializing...')
+    out = ipywidgets.Output()
+    ipydisplay.display(out)
+    with out:
+        ipydisplay.clear_output(wait=True)
+        print('Initializing...')
 
     # Make sure that shape_model is a list even with one member
     if not isinstance(shape_model, list):
@@ -1961,7 +1976,8 @@ def visualize_shape_model_3d(shape_model, n_parameters=5, mode='multiple',
         # Clear current figure, but wait until the generation of the new data
         # that will be rendered
         save_figure_wid.renderer.clear_figure()
-        ipydisplay.clear_output(wait=True)
+        with out:
+            ipydisplay.clear_output(wait=True)
 
         # Get selected level
         level = 0
@@ -2036,17 +2052,18 @@ def visualize_shape_model_3d(shape_model, n_parameters=5, mode='multiple',
     def plot_variance(name):
         # Clear current figure, but wait until the generation of the new data
         # that will be rendered
-        ipydisplay.clear_output(wait=True)
 
         # Get selected level
         level = level_wid.value if n_levels > 1 else 0
 
         # Render
-        plt.subplot(121)
-        shape_model[level].plot_eigenvalues_ratio()
-        plt.subplot(122)
-        shape_model[level].plot_eigenvalues_cumulative_ratio()
-        plt.show()
+        with out:
+            ipydisplay.clear_output(wait=True)
+            plt.subplot(121)
+            shape_model[level].plot_eigenvalues_ratio()
+            plt.subplot(122)
+            shape_model[level].plot_eigenvalues_cumulative_ratio()
+            plt.show()
 
     # Create widgets
     model_parameters_wid = LinearModelParametersWidget(
@@ -2121,7 +2138,8 @@ def visualize_shape_model_3d(shape_model, n_parameters=5, mode='multiple',
 
     # Trigger initial visualization
     render_function({})
-    print_dynamic('')
+    with out:
+        print_dynamic('')
 
 
 def visualize_appearance_model(appearance_model, n_parameters=5,
